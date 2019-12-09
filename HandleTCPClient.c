@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>      // for isupper() etc.
 #include <sys/socket.h> // for send() and recv()
 #include <unistd.h>     // for sleep(), close()
@@ -57,9 +58,9 @@ void HandleTCPClient (int clntSocket)
     info ("close");
 }
 char* changeCase(char message[]){
-    char* s = malloc(sizeof(message));
+    char* s = malloc((int)RCVBUFSIZE);
     int i=0;
-    while(message[i] !='\0' || message[i] !=NULL) 
+    while(message[i] !='\0') 
      {
         if(message[i] >= 'A' && message[i] <= 'Z') {        
          message[i] += 32;

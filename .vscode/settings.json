@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "auxiliary.h": "c",
+        "handletcpclient.h": "c"
+    }
+}
