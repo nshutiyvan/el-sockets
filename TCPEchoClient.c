@@ -31,18 +31,31 @@ int main (int argc, char *argv[])
         delaying();
         
         // TODO: add code to send this string to the server; use send()
-       
-        char sendBuffer[32]="DAWIDI WO KWA KARORI YARIZE du";
-        send (sock,sendBuffer,sizeof(sendBuffer), 0) ;
+        send (sock,echoString ,echoStringLen, 0);
         // TODO: add code to display the transmitted string in verbose mode; use info_s()
-        //info_s()
+        info_s("Sending:",echoString);
         // TODO: add code to receive & display the converted string from the server
         //       use recv() & printf()
-        
+        bzero(echoString,echoStringLen);
     }
+     bytesRcvd = recv (sock, echoBuffer, RCVBUFSIZE-1, 0);
+     if(bytesRcvd < 0)
+        DieWithError ("recv() failed");
 
-    delaying ();
-
+     while (bytesRcvd > 0)      /* zero indicates end of transmission */
+    {      
+        printf("%s \n",echoBuffer);
+        
+        delaying ();
+        // receive next string
+        bzero(echoBuffer,RCVBUFSIZE);
+        bytesRcvd = recv (sock, echoBuffer, RCVBUFSIZE-1, 0);
+        if (bytesRcvd < 0)
+        {
+            DieWithError ("recv() failed");
+        }
+        
+    }   
     close (sock);
     info ("close & exit");
     exit (0);

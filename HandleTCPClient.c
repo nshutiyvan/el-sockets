@@ -28,13 +28,14 @@ void HandleTCPClient (int clntSocket)
     /* Send received string and receive again until end of transmission */
     while (recvMsgSize > 0)      /* zero indicates end of transmission */
     {
-        // TODO: add code to print the received string; use printf()
-        
+        // TODO: add code to print the received string; use printf()       
         printf("%s \n",echoBuffer);
         // TODO: add code to convert the upper/lower chars of the received string
         char* message = changeCase(echoBuffer);
+        /*
         printf("Prinnting modified string:");
         printf("%s\n",message);
+        */
         delaying ();
         
         /* Echo message back to client */
@@ -42,37 +43,41 @@ void HandleTCPClient (int clntSocket)
         {
             DieWithError ("send() failed");
         }
-
         // TODO: add code to display the transmitted string in verbose mode; use info_s()
-
+        info_s("SERVER SENDING",message);
         // receive next string
+        bzero(echoBuffer,RCVBUFSIZE);
         recvMsgSize = recv (clntSocket, echoBuffer, RCVBUFSIZE-1, 0);
         if (recvMsgSize < 0)
         {
             DieWithError ("recv() failed");
         }
         info_d ("recv", recvMsgSize);
+        
+        
+        
     }
-
     close (clntSocket);    /* Close client socket */
     info ("close");
 }
 char* changeCase(char message[]){
-    char* s = malloc((int)RCVBUFSIZE);
+    char temp[RCVBUFSIZE-1];
+    char *s;
     int i=0;
     while(message[i] !='\0') 
      {
         if(message[i] >= 'A' && message[i] <= 'Z') {        
          message[i] += 32;
-         s[i] = message[i];
+         temp[i] = message[i];
         }else if(message[i]>='a' && message[i]<='z'){
            message[i] -= 32;
-           s[i] = message[i];
+           temp[i] = message[i];
         }
         else{
-           s[i] =  message[i];
+           temp[i] =  message[i];
         }
         i++;
      }
+     s = temp;
     return s; 
 }
