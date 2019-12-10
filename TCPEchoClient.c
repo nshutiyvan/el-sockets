@@ -18,44 +18,32 @@ int main (int argc, char *argv[])
     int         echoStringLen;          /* Length of string to echo */
     int         bytesRcvd;              /* Bytes read in single recv() */
     int         i;                      /* counter for data-arguments */
-    int         n;
     parse_args (argc, argv);
 
     sock = CreateTCPClientSocket (argv_ip, argv_port);
         
     for (i = 0; i < argv_nrofdata; i++)
     {
-        echoString = argv_data [i];
-        echoStringLen = strlen (echoString);          /* Determine input length */
+        echoString = argv_data[i];
+        echoStringLen = strlen(echoString);          /* Determine input length */
 
         delaying();
         
         // TODO: add code to send this string to the server; use send()
-        send (sock,echoString ,echoStringLen, 0);
+        send (sock,echoString,echoStringLen+1, 0);
         // TODO: add code to display the transmitted string in verbose mode; use info_s()
-        info_s("Sending:",echoString);
+        info_s("\nSending:",echoString);
         // TODO: add code to receive & display the converted string from the server
         //       use recv() & printf()
-        bzero(echoString,echoStringLen);
-    }
-     bytesRcvd = recv (sock, echoBuffer, RCVBUFSIZE-1, 0);
-     if(bytesRcvd < 0)
-        DieWithError ("recv() failed");
-
-     while (bytesRcvd > 0)      /* zero indicates end of transmission */
-    {      
-        printf("%s \n",echoBuffer);
-        
-        delaying ();
-        // receive next string
-        bzero(echoBuffer,RCVBUFSIZE);
-        bytesRcvd = recv (sock, echoBuffer, RCVBUFSIZE-1, 0);
-        if (bytesRcvd < 0)
-        {
+        bzero(echoBuffer,sizeof(echoBuffer));
+        bytesRcvd = recv (sock, echoBuffer,sizeof(echoBuffer)+1, 0);
+        if(bytesRcvd < 0){
             DieWithError ("recv() failed");
         }
-        
-    }   
+        printf("\nReceiving:%s",echoBuffer);
+        //bzero(echoString,echoStringLen);
+         
+    }    
     close (sock);
     info ("close & exit");
     exit (0);

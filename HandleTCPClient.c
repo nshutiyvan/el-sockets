@@ -18,7 +18,7 @@ void HandleTCPClient (int clntSocket)
     int  recvMsgSize;                   /* Size of received message */
 
     /* Receive message from client */
-    recvMsgSize = recv (clntSocket, echoBuffer, RCVBUFSIZE-1, 0);
+    recvMsgSize = recv (clntSocket, echoBuffer,RCVBUFSIZE-1, 0);
     if (recvMsgSize < 0)
     {
         DieWithError ("recv() failed");
@@ -39,7 +39,7 @@ void HandleTCPClient (int clntSocket)
         delaying ();
         
         /* Echo message back to client */
-        if (send (clntSocket, echoBuffer, recvMsgSize, 0) != recvMsgSize)
+        if (send (clntSocket, echoBuffer,recvMsgSize, 0) != recvMsgSize)
         {
             DieWithError ("send() failed");
         }
@@ -48,36 +48,33 @@ void HandleTCPClient (int clntSocket)
         // receive next string
         bzero(echoBuffer,RCVBUFSIZE);
         recvMsgSize = recv (clntSocket, echoBuffer, RCVBUFSIZE-1, 0);
+        printf("Here:%d",recvMsgSize);
         if (recvMsgSize < 0)
         {
             DieWithError ("recv() failed");
         }
-        info_d ("recv", recvMsgSize);
-        
-        
+        info_d ("recv", recvMsgSize);      
         
     }
     close (clntSocket);    /* Close client socket */
     info ("close");
 }
 char* changeCase(char message[]){
-    char temp[RCVBUFSIZE-1];
-    char *s;
+    char s[BUFSIZ];
     int i=0;
     while(message[i] !='\0') 
      {
         if(message[i] >= 'A' && message[i] <= 'Z') {        
          message[i] += 32;
-         temp[i] = message[i];
+         s[i] = message[i];
         }else if(message[i]>='a' && message[i]<='z'){
            message[i] -= 32;
-           temp[i] = message[i];
+           s[i] = message[i];
         }
         else{
-           temp[i] =  message[i];
+           s[i] =  message[i];
         }
         i++;
      }
-     s = temp;
     return s; 
 }
