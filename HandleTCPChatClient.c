@@ -24,49 +24,36 @@ void HandleTCPChatClient (int clntSocket)
         DieWithError ("recv() failed");
     }
     info_d ("Recv", recvMsgSize);
+	
+	
 	/* Send received string and receive again until end of transmission */
-    while (1)      /* zero indicates end of transmission */
+	while (recvMsgSize > 0)      /* zero indicates end of transmission */
     {
-			printf("the buffer is not null \n");
-			int val = 0;
-			if(val == 0)
-			{
-				// TODO: add code to print the received string; use printf()
-				printf("%s \n",echoBuffer);
-				
-				int rescmp = strcmp(echoBuffer, "quit");
-				if(rescmp == 0)
-				{
-				   close (clntSocket);    /* Close client socket */
-				   info ("close");
-				}
-				val = 1;	
-			}		
-			if(val == 1)
-			{
-				//sedn the values 
-				if (send (clntSocket, echoBuffer, recvMsgSize, 0) != recvMsgSize)
-				{
-					DieWithError ("send() failed");
-				}
-				printf("send the data is %s \n", echoBuffer);
-				
-				for(int i = 0; i < sizeof(echoBuffer); i++)
-				{
-					echoBuffer[i] = 0;
-				}
-				
-				val = 2;
-			}	
-			if(val == 2)
-			{
-				printf("check of other values \n");
-				recvMsgSize = recv (clntSocket, echoBuffer, RCVBUFSIZE-1, 0);
-				if (recvMsgSize < 0)
-				{
-					DieWithError ("recv() failed");
-				}
-				val = 0;			
-			}
+
+		int str_val = 0;		
+		printf("%s \n",echoBuffer);
+		//get the length of data to send 
+		str_val = strlen(echoBuffer);
+		//printing the length of our values 
+		printf("size of the length is %d \n", str_val);
+
+	
+		//sending value state 
+		//start sending the values 
+		send(clntSocket,echoBuffer, str_val + 1, 0);
+
+		//print the sending message 
+		printf("sending message %s \n", echoBuffer);
+
+		//clear the buffer 
+		bzero(echoBuffer,str_val);
+		
+		//get the next value in the buffer
+		printf("check of other values \n");
+		recvMsgSize = recv (clntSocket, echoBuffer, RCVBUFSIZE-1, 0);
+		if (recvMsgSize < 0)
+		{
+			DieWithError ("recv() failed");
+		}
 	}
 }

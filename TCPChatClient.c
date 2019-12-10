@@ -23,15 +23,17 @@ int main (int argc, char *argv[])
 		printf("enter a message \n");
 		scanf("%s", sendBuffer);
 		printf("%s \n", sendBuffer);
+        int send_val = strlen(sendBuffer);
+        printf("size of my string is %d \n", send_val);
 		// TODO: add code to send this string to the server; use send()
-        send(sock,sendBuffer,sizeof(sendBuffer), 0);
+        send(sock,sendBuffer, send_val + 1, 0);
         // TODO: add code to display the transmitted string in verbose mode; use 
         info_s(sendBuffer, sendBuffer);
         // TODO: add code to receive & display the converted string from the server
         //       use recv() & printf()
         
+       
         bytesRcvd =recv(sock, echoBuffer, RCVBUFSIZE-1, 0);
-   
         //check if there is something received 
         if(bytesRcvd < 0)
         {
@@ -40,13 +42,21 @@ int main (int argc, char *argv[])
 		else
 		{
 			printf("received data are: %s \n", echoBuffer);
-			for(int i = 0; i < sizeof(echoBuffer); i++)
+
+            //quit when the value is quit 
+			int rescmp = strcmp(echoBuffer, "quit");
+			if(rescmp == 0)
 			{
-					echoBuffer[i] = 0;
+				close(sock); //close the client 
+                info("close & exit");
+                exit(0);
 			}
+			//set the buffer to zero 
+            bzero(echoBuffer,sizeof(echoBuffer));
 		}
+
+        //close the buffer when the receive length of data is zero 
 	}
-	close(sock);
-    info("close & exit");
-    exit(0);
+	
+    
 }
