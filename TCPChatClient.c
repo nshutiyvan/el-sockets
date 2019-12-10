@@ -14,33 +14,24 @@ int main (int argc, char *argv[])
     char        echoBuffer[RCVBUFSIZE]; /* Buffer for received string */
     int         echoStringLen;          /* Length of string to echo */
     int         bytesRcvd;              /* Bytes read in single recv() */
-    int         i;                      /* counter for data-arguments */
-
+    //int         i;                      /* counter for data-arguments */
     parse_args (argc, argv);
-
-    sock = CreateTCPClientSocket (argv_ip, argv_port);
-    
-        
-    for (i = 0; i < argv_nrofdata; i++)
-    {
-        echoString = argv_data [i];
-        echoStringLen = strlen (echoString);          /* Determine input length */
-
-        delaying();
-        
-        char sendBuffer[echoStringLen];
-        //printing the sending data 
-        printf("%s \n", argv_data[i]);
-        strcpy(sendBuffer, argv_data[i]);
-        // TODO: add code to send this string to the server; use send()
-        send(sock,sendBuffer,echoStringLen,0);
+    sock =CreateTCPClientSocket(argv_ip, argv_port);  
+    char sendBuffer[32];    
+    while(1)
+    {	
+		printf("enter a message \n");
+		scanf("%s", sendBuffer);
+		printf("%s \n", sendBuffer);
+		// TODO: add code to send this string to the server; use send()
+        send(sock,sendBuffer,sizeof(sendBuffer), 0);
         // TODO: add code to display the transmitted string in verbose mode; use 
         info_s(sendBuffer, sendBuffer);
         // TODO: add code to receive & display the converted string from the server
         //       use recv() & printf()
         
         bytesRcvd =recv(sock, echoBuffer, RCVBUFSIZE-1, 0);
-        
+   
         //check if there is something received 
         if(bytesRcvd < 0)
         {
@@ -49,14 +40,13 @@ int main (int argc, char *argv[])
 		else
 		{
 			printf("received data are: %s \n", echoBuffer);
-            for(int i = 0; i < sizeof(echoBuffer); i++)
+			for(int i = 0; i < sizeof(echoBuffer); i++)
 			{
 					echoBuffer[i] = 0;
 			}
 		}
-        
-    }
-    close(sock);
+	}
+	close(sock);
     info("close & exit");
     exit(0);
 }
