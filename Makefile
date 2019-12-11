@@ -49,4 +49,5 @@ clean:
 	 HandleTCPClient.o TCPEchoClient.o TCPEchoServer-Fork.o \
 	 TCPEchoServer.o TCPEchoServer-Thread.o TCPEchoClient \
 	  TCPEchoServer-Fork TCPEchoServer TCPEchoServer-Thread\
-	  TCPChatServer TCPChatClient HandleTCPChatClient
+	  TCPChatServer TCPChatClient HandleTCPChatClient\
+	  TCPChatServer.o TCPChatClient.o HandleTCPChatClient.o\
