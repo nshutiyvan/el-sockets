@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
         // TODO: add code to receive & display the converted string from the server
         //       use recv() & printf()
         bzero(echoBuffer,sizeof(echoBuffer));
-        bytesRcvd = recv (sock, echoBuffer,sizeof(echoBuffer)+1, 0);
+        bytesRcvd = recv (sock, echoBuffer,sizeof(echoBuffer), 0);
         if(bytesRcvd < 0){
             DieWithError ("recv() failed");
         }
